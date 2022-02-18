@@ -6,6 +6,15 @@ import (
 	"time"
 )
 
+type item struct {
+	name           string
+	price          int
+	income_outcome string
+	comment        string
+	category       string
+	date           string
+}
+
 func main() {
 	var name string
 	var price int             //сами высчитываем
