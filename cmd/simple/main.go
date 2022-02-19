@@ -23,11 +23,20 @@ type Transfer struct {
 	Category string    `bson:"category"`
 }
 
+type Category_item struct {
+	Category string    `bson:"category"`
+	Name     string    `bson:"name"`
+	Price    int       `bson:"price"`
+	Date     time.Time `bson:"date"`
+	Income   string    `bson:"income"`
+	Comment  string    `bson:"comment"`
+}
+
 var collection *mongo.Collection
 var ctx = context.TODO()
 
 func init() {
-	clientOptions := options.Client().ApplyURI("connection") //здесь мы подключаемся к MongoDB
+	clientOptions := options.Client().ApplyURI("mongodb+srv://cheenv:Prado393@cluster0.kktes.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") //здесь мы подключаемся к MongoDB
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -72,9 +81,6 @@ func main() {
 					if income != "income" && income != "outcome" {
 						return errors.New("is it income or outcome?") //только income или outcome
 					}
-					if category != "food" && category != "transport" && category != "salary" { //только ограниченные категории
-						return errors.New("please type right category")
-					}
 					transfer := &Transfer{ //заполняем структуру
 						Name:     str,
 						Price:    integer,
@@ -103,6 +109,43 @@ func main() {
 					}
 
 					printTransfers(transfers)
+					return nil
+				},
+			},
+			{
+				Name:    "category", //вторая функция, увидеть список трансферов.
+				Aliases: []string{"l"},
+				Usage:   "list all transfers",
+				Action: func(c *cli.Context) error {
+					transfers, err := getAll()
+					if err != nil {
+						if err == mongo.ErrNoDocuments {
+							fmt.Print("Nothing to see here.\nRun `add 'transfer'` to add a transfer category")
+							return nil
+						}
+
+						return err
+					}
+
+					printCategories(transfers)
+					return nil
+				},
+			},
+			{
+				Name:    "delete", //вторая функция, увидеть список трансферов.
+				Aliases: []string{"l"},
+				Usage:   "delete transaction by name",
+				Action: func(c *cli.Context) error {
+					transfers, err := getAll()
+					if err != nil {
+						if err == mongo.ErrNoDocuments {
+							fmt.Print("No elements to delete")
+							return nil
+						}
+
+						return err
+					}
+					deleteTransfer(transfers)
 					return nil
 				},
 			},
@@ -168,4 +211,33 @@ func printTransfers(transfers []*Transfer) { //печатаем трансфер
 		fmt.Println("Category:", v.Category)
 		fmt.Println("===================")
 	}
+}
+
+func printCategories(transfers []*Transfer) {
+	var choice string
+	fmt.Scan(&choice)
+	for i, v := range transfers {
+		if v.Category == choice {
+			fmt.Println("     ITEM", i+1)
+			fmt.Println("Name:", v.Name)
+			fmt.Println("Price:", v.Price)
+			fmt.Println("Date:", v.Date)
+			fmt.Println("Income:", v.Income)
+			fmt.Println("Comments:", v.Comment)
+			fmt.Println("Category:", v.Category)
+			fmt.Println("===================")
+		}
+	}
+}
+
+func deleteTransfer(transfers []*Transfer) {
+	fmt.Println("type name of element which you want to delete:")
+	var choice string
+	fmt.Scan(&choice)
+	result, err := collection.DeleteOne(ctx, bson.M{"name": choice})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("DeleteOne removed %v document(s)\n", result.DeletedCount)
+
 }
