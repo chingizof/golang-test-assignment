@@ -10,7 +10,7 @@ To see the list of your transfers, type:
 
 To see the list of items with specific category, type:
 
-<<go run cmd/simple/main.go category>
+<go run cmd/simple/main.go category>
 after that, wait for the message and type category you want to find
 
 To delete an item, type:
