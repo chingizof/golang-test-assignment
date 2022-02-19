@@ -27,7 +27,7 @@ var collection *mongo.Collection
 var ctx = context.TODO()
 
 func init() {
-	clientOptions := options.Client().ApplyURI("mongodb+srv://cheenv:Prado393@cluster0.kktes.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("connection")
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
