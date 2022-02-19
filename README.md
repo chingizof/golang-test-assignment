@@ -8,7 +8,17 @@ after that input all asked fields.
 To see the list of your transfers, type:
 <go run cmd/simple/main.go all>
 
-Currently, the project has only 2 functions (add and all)
-I will add other (edit, delete) as soon as possible
+To see the list of items with specific category, type:
+
+<<go run cmd/simple/main.go category>
+after that, wait for the message and type category you want to find
+
+To delete an item, type:
+<go run cmd/simple/main.go delete>
+after that, wait for the message and type name you want to delete
+
+
+
+
 
 Project involved MongoDB database.
