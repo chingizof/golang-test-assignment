@@ -5,15 +5,18 @@ To add an element, open the project in consol/terminal and type:
 
 after that input all asked fields.
 
+
 To see the list of your transfers, type:
 
 <go run cmd/simple/main.go all>
+
 
 To see the list of items with specific category, type:
 
 <go run cmd/simple/main.go category>
 
 after that, wait for the message and type category you want to find
+
 
 To delete an item, type:
 
