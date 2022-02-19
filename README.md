@@ -1,6 +1,6 @@
 # golang-test-assignment
 Developed basic golang application for management of incomes and outcomes. 
-To use, open the project in consol/terminal and type:
+To add an element, open the project in consol/terminal and type:
 <go run cmd/simple/main.go add>
 
 after that input all asked fields.
