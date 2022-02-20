@@ -22,8 +22,13 @@ To delete an item, type:
 
 <go run cmd/simple/main.go delete>
 
-after that, wait for the message and type name you want to delete
+after that, wait for the message and type name you want to delete.
 
+To update a price of an item, type
+
+<go run cmd/simple/main.go update>
+
+after that, wait for the message and follow the steps in console
 
 
 
