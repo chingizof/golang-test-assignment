@@ -36,7 +36,7 @@ var collection *mongo.Collection
 var ctx = context.TODO()
 
 func init() {
-	clientOptions := options.Client().ApplyURI("mongodb+srv://cheenv:password@cluster0.kktes.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") //здесь мы подключаемся к MongoDB
+	clientOptions := options.Client().ApplyURI("mongodb+srv://cheenv:Prado393@cluster0.kktes.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") //здесь мы подключаемся к MongoDB
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -149,6 +149,24 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:    "update", //вторая функция, увидеть список трансферов.
+				Aliases: []string{"l"},
+				Usage:   "update transaction by id",
+				Action: func(c *cli.Context) error {
+					transfers, err := getAll()
+					if err != nil {
+						if err == mongo.ErrNoDocuments {
+							fmt.Print("No elements to update")
+							return nil
+						}
+
+						return err
+					}
+					updateTransfer(transfers)
+					return nil
+				},
+			},
 		},
 	}
 
@@ -240,4 +258,26 @@ func deleteTransfer(transfers []*Transfer) {
 	}
 	fmt.Printf("DeleteOne removed %v document(s)\n", result.DeletedCount)
 
+}
+
+func updateTransfer([]*Transfer) {
+	fmt.Println("which item do you want to edit? (type name)")
+	var choice string
+	var newprice int
+	fmt.Scan(&choice)
+	fmt.Println("which price do you want to put?")
+	fmt.Scan(&newprice)
+
+	filter := bson.D{{"name", choice}}
+	update := bson.D{{"$set",
+		bson.D{
+			{"price", newprice},
+		},
+	}}
+
+	res, err := collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("UpdateOne updated %v document(s)\n", res.ModifiedCount)
 }
